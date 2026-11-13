@@ -1,0 +1,7 @@
+{
+  "name": "karl-aira-wedding-invitation",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  }
+}

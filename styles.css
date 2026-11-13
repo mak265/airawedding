@@ -55,7 +55,50 @@ body{font-size:16px;font-weight:400;line-height:1.78}.grain{opacity:.1}
 }
 
 .gallery-grid .gallery-photo:nth-child(3) img {
-  object-position: center 100%;
+  object-position: center 52%;
+}
+
+.gallery-grid .gallery-photo:nth-child(5) img {
+  object-position: center bottom;
+}
+
+.guest-reservation {
+  padding: .65rem 1rem;
+  background: var(--paper);
+  color: var(--wine);
+  border-left: 2px solid var(--champagne);
+  line-height: 1.4;
+}
+
+.guest-reservation strong {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.admin-panel {
+  width: min(100% - 2rem, 34rem);
+  margin: clamp(2rem, 10vh, 6rem) auto;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  background: var(--paper);
+  border: 1px solid var(--champagne);
+}
+
+.admin-panel h1 {
+  margin: 0 0 1.5rem;
+  color: var(--wine);
+  font: 500 clamp(2rem, 8vw, 3rem)/1.05 var(--serif);
+}
+
+.admin-panel .field {
+  margin: 1rem 0;
+}
+
+.admin-panel button {
+  margin-bottom: .5rem;
+}
+
+.admin-panel a {
+  color: var(--wine);
 }
 .gallery-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(64,91,60,.05),rgba(23,55,40,.16));box-shadow:inset 0 0 0 1px rgba(255,255,255,.35);pointer-events:none}.gallery-photo:before{z-index:2}
 .asset-note{margin-top:28px;color:var(--burgundy);font-size:17px}

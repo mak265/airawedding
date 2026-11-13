@@ -88,37 +88,23 @@ $('#enterInvitation').addEventListener('click', () => {
   });
 }, { once: true });
 
-const countInput = $('#attendeeCount');
-const guestNamesWrap = $('#guestNamesWrap');
-document.querySelectorAll('#guestCount button').forEach((button) => {
-  button.addEventListener('click', () => {
-    document.querySelectorAll('#guestCount button').forEach((item) => item.classList.remove('active'));
-    button.classList.add('active');
-    countInput.value = button.dataset.count;
-    guestNamesWrap.hidden = Number(button.dataset.count) === 1;
-  });
-});
-
-const form = $('#rsvpForm');
-const success = $('#rsvpSuccess');
-function displaySavedResponse() {
-  if (localStorage.getItem('karl-aira-rsvp')) {
-    form.hidden = true;
-    success.hidden = false;
+async function showGuestReservation() {
+  const token = new URLSearchParams(window.location.search).get('invite');
+  if (token === null) return;
+  const reservation = $('#guestReservation');
+  reservation.hidden = false;
+  $('#reservedSeats').textContent = 'Loading reserved seats…';
+  try {
+    if (!/^[A-Za-z0-9_-]{32}$/.test(token)) throw new Error('invalid link');
+    const response = await fetch('/api/invites/' + token);
+    if (!response.ok) throw new Error('reservation unavailable');
+    const { name, seats } = await response.json();
+    $('#invitedGuest').textContent = name;
+    $('#reservedSeats').textContent = seats === 1
+      ? 'We have reserved 1 seat for you.'
+      : `We have reserved ${seats} seats for you.`;
+  } catch {
+    $('#reservedSeats').textContent = 'Reserved seats could not be loaded. Please check your invitation link.';
   }
 }
-displaySavedResponse();
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
-  const response = Object.fromEntries(new FormData(form));
-  response.submittedAt = new Date().toISOString();
-  localStorage.setItem('karl-aira-rsvp', JSON.stringify(response));
-  form.hidden = true;
-  success.hidden = false;
-  success.scrollIntoView({ behavior: 'smooth', block: 'center' });
-});
-$('#editResponse').addEventListener('click', () => {
-  localStorage.removeItem('karl-aira-rsvp');
-  success.hidden = true;
-  form.hidden = false;
-});
+showGuestReservation();

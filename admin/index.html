@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Guest links · Karl &amp; Aira</title>
+  <link rel="stylesheet" href="/styles.css?v=11" />
+  <script src="/admin/admin.js" defer></script>
+</head>
+<body>
+  <main class="admin-panel">
+    <p class="kicker">Karl &amp; Aira</p>
+    <h1>Create a guest link</h1>
+    <form id="createInvite">
+      <div class="field">
+        <label for="inviteName">Guest or family name</label>
+        <input id="inviteName" name="name" maxlength="100" required />
+      </div>
+      <div class="field">
+        <label for="inviteSeats">Reserved seats</label>
+        <input id="inviteSeats" name="seats" type="number" min="1" max="100" step="1" value="1" required />
+      </div>
+      <button class="submit-btn">Generate link</button>
+    </form>
+    <div id="inviteResult" hidden>
+      <div class="field">
+        <label for="inviteUrl">Share this link with your guest</label>
+        <input id="inviteUrl" readonly />
+      </div>
+      <button class="submit-btn" id="copyInvite" type="button">Copy link</button>
+      <a id="previewInvite" target="_blank" rel="noopener noreferrer">Preview invitation</a>
+    </div>
+    <p id="inviteStatus" role="status"></p>
+  </main>
+</body>
+</html>

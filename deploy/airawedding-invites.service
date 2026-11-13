@@ -1,0 +1,16 @@
+[Unit]
+Description=Karl and Aira guest invitation links
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /var/www/airawedding/deploy/invites.py /var/lib/airawedding-invites/invitations.sqlite
+DynamicUser=yes
+StateDirectory=airawedding-invites
+StateDirectoryMode=0700
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

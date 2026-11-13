@@ -92,7 +92,9 @@ async function showGuestReservation() {
     const response = await fetch('/api/invites/' + token);
     if (!response.ok) throw new Error('reservation unavailable');
     const { name, seats } = await response.json();
-    $('#invitedGuest').textContent = name;
+    $('#welcomeGuest').textContent = name;
+    $('#welcomeGuestLine').hidden = false;
+    $('#invitedGuest').textContent = `Greetings, ${name}`;
     $('#reservedSeats').textContent = seats === 1
       ? 'We have reserved 1 seat for you.'
       : `We have reserved ${seats} seats for you.`;

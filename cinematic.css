@@ -87,6 +87,8 @@
 
 .welcome-gate {
   background: #20261d;
+  overflow-y: auto;
+  align-items: safe center;
 }
 
 .welcome-gate-photo {
@@ -96,6 +98,25 @@
 .welcome-gate-card {
   background: #20261dde;
   border-color: #d8b87d87;
+}
+
+.welcome-guest-line {
+  margin: 0 0 1rem;
+  color: var(--paper);
+  font: 500 clamp(1.5rem, 5vw, 2.25rem)/1.15 var(--serif);
+  overflow-wrap: anywhere;
+}
+
+.welcome-guest-line strong {
+  font-weight: inherit;
+}
+
+.welcome-wedding-label {
+  color: var(--champagne);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
 }
 
 .countdown-section {

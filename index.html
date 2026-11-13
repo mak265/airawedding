@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css?v=12" />
-  <link rel="stylesheet" href="/cinematic.css?v=3" />
+  <link rel="stylesheet" href="/cinematic.css?v=4" />
   <meta name="referrer" content="strict-origin" />
 </head>
 <body>
@@ -18,9 +18,13 @@
   <div class="welcome-gate" id="welcomeGate" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
     <div class="welcome-gate-photo" aria-hidden="true"></div>
     <div class="welcome-gate-card">
-      <p class="kicker">You are invited</p>
       <div class="gate-monogram">K <i>&</i> A</div>
-      <h2 id="welcomeTitle">Our forever begins</h2>
+      <p class="kicker">You are invited</p>
+      <div id="welcomeGuestLine" class="welcome-guest-line" hidden>
+        <strong id="welcomeGuest"></strong>
+      </div>
+      <div class="welcome-wedding-label">To the wedding of</div>
+      <h2 id="welcomeTitle">Karl &amp; Aira</h2>
       <p>January 5, 2027 · 2:00 PM</p>
       <button type="button" id="enterInvitation">Open Invitation <span>Music will play</span></button>
     </div>
@@ -164,6 +168,6 @@
   </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <audio id="bgMusic" class="background-audio" loop preload="none"><source src="/assets/until-i-found-you-violin.mp3" type="audio/mpeg" /></audio>
-  <script src="/script.js?v=13"></script>
+  <script src="/script.js?v=14"></script>
 </body>
 </html>

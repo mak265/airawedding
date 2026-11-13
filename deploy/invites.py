@@ -17,6 +17,9 @@ class InvitationStore:
         self.path = path
         with closing(sqlite3.connect(path)) as db, db:
             db.execute("CREATE TABLE IF NOT EXISTS invitations (token TEXT PRIMARY KEY, name TEXT NOT NULL, seats INTEGER NOT NULL)")
+            columns = {row[1] for row in db.execute("PRAGMA table_info(invitations)")}
+            if "active" not in columns:
+                db.execute("ALTER TABLE invitations ADD COLUMN active INTEGER NOT NULL DEFAULT 1")
             db.execute("CREATE TABLE IF NOT EXISTS entourage (id INTEGER PRIMARY KEY CHECK (id = 1), roster TEXT NOT NULL)")
 
     def read_entourage(self):
@@ -38,19 +41,38 @@ class InvitationStore:
         with closing(sqlite3.connect(self.path)) as db, db:
             db.execute("INSERT OR REPLACE INTO entourage VALUES (1, ?)", (json.dumps(roster),))
 
-    def create(self, name, seats):
+    @staticmethod
+    def validate_guest(name, seats):
         if not isinstance(name, str) or not 1 <= len(name.strip()) <= 100:
             raise ValueError("Enter a guest or family name (1–100 characters).")
         if type(seats) is not int or not 1 <= seats <= 100:
             raise ValueError("Enter a whole number of seats from 1 to 100.")
+
+    def create(self, name, seats):
+        self.validate_guest(name, seats)
         token = secrets.token_urlsafe(24)
         with closing(sqlite3.connect(self.path)) as db, db:
-            db.execute("INSERT INTO invitations VALUES (?, ?, ?)", (token, name.strip(), seats))
+            db.execute("INSERT INTO invitations (token, name, seats) VALUES (?, ?, ?)", (token, name.strip(), seats))
         return token
+
+    def list_invites(self):
+        with closing(sqlite3.connect(self.path)) as db:
+            rows = db.execute("SELECT token, name, seats, active FROM invitations ORDER BY rowid DESC").fetchall()
+        return [{"token": token, "name": name, "seats": seats, "active": bool(active)}
+                for token, name, seats, active in rows]
+
+    def update_invite(self, token, name, seats, active):
+        self.validate_guest(name, seats)
+        if type(active) is not bool:
+            raise ValueError("Choose whether the link is active.")
+        with closing(sqlite3.connect(self.path)) as db, db:
+            result = db.execute("UPDATE invitations SET name = ?, seats = ?, active = ? WHERE token = ?",
+                                (name.strip(), seats, active, token))
+            return result.rowcount == 1
 
     def find(self, token):
         with closing(sqlite3.connect(self.path)) as db:
-            row = db.execute("SELECT name, seats FROM invitations WHERE token = ?", (token,)).fetchone()
+            row = db.execute("SELECT name, seats FROM invitations WHERE token = ? AND active = 1", (token,)).fetchone()
         return {"name": row[0], "seats": row[1]} if row else None
 
 
@@ -69,6 +91,9 @@ class InvitationHandler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def do_GET(self):
+        if self.path == "/admin/api/invites":
+            self.respond(200, self.server.store.list_invites())
+            return
         if self.path == "/api/entourage":
             self.respond(200, self.server.store.read_entourage())
             return
@@ -80,7 +105,8 @@ class InvitationHandler(BaseHTTPRequestHandler):
         self.respond(200, invitation)
 
     def do_POST(self):
-        if self.path not in ("/admin/api/invites", "/admin/api/entourage"):
+        edit = re.fullmatch(r"/admin/api/invites/([A-Za-z0-9_-]{32})", self.path)
+        if not edit and self.path not in ("/admin/api/invites", "/admin/api/entourage"):
             self.respond(404, {"error": "Not found."})
             return
         if self.headers.get_content_type() != "application/json":
@@ -97,6 +123,12 @@ class InvitationHandler(BaseHTTPRequestHandler):
             if self.path == "/admin/api/entourage":
                 self.server.store.save_entourage(data)
                 self.respond(200, {"saved": True})
+                return
+            if edit:
+                if self.server.store.update_invite(edit[1], data.get("name"), data.get("seats"), data.get("active")):
+                    self.respond(200, {"saved": True})
+                else:
+                    self.respond(404, {"error": "Invitation link not found."})
                 return
             token = self.server.store.create(data.get("name"), data.get("seats"))
         except (ValueError, UnicodeError) as error:

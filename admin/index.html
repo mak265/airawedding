@@ -6,7 +6,8 @@
   <meta name="robots" content="noindex" />
   <title>Guest links · Karl &amp; Aira</title>
   <link rel="stylesheet" href="/styles.css?v=11" />
-  <script src="/admin/admin.js?v=2" defer></script>
+  <script src="/admin/admin.js?v=3" defer></script>
+  <link rel="stylesheet" href="/admin/links.css" />
   <script src="/admin/entourage.js" defer></script>
 </head>
 <body>
@@ -34,6 +35,32 @@
     </div>
     <p id="inviteStatus" role="status"></p>
   </main>
+  <section class="admin-panel link-manager" aria-labelledby="guestLinksTitle">
+    <h2 id="guestLinksTitle">Manage guest links</h2>
+    <div class="field">
+      <label for="findInvite">Search guest or family name</label>
+      <input id="findInvite" type="search" />
+    </div>
+    <p id="linksStatus" role="status"></p>
+    <div id="guestLinks"></div>
+    <template id="guestLinkTemplate">
+      <form class="guest-link">
+        <div class="field">
+          <label>Guest or family name <input name="name" required maxlength="100" /></label>
+        </div>
+        <div class="field">
+          <label>Reserved seats <input name="seats" type="number" min="1" max="100" required /></label>
+        </div>
+        <label class="link-active"><input name="active" type="checkbox" /> Active link</label>
+        <div class="link-actions">
+          <button class="submit-btn">Save changes</button>
+          <button class="link-secondary" type="button" data-copy>Copy link</button>
+          <a target="_blank" rel="noopener noreferrer">Preview</a>
+        </div>
+        <p class="link-feedback" role="status"></p>
+      </form>
+    </template>
+  </section>
   <section class="admin-panel" aria-labelledby="entourageTitle">
     <h2 id="entourageTitle">Wedding entourage</h2>
     <p>Enter one name per line under each role.</p>

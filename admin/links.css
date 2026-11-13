@@ -1,0 +1,25 @@
+.link-manager {
+  width: min(100% - 2rem, 54rem);
+}
+
+.guest-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(6rem, 9rem);
+  gap: .5rem 1rem;
+  padding-block: 1rem;
+  border-top: 1px solid #d6c7b4;
+}
+
+.guest-link .field { margin: 0; }
+.guest-link[hidden] { display: none; }
+.link-feedback { overflow-wrap: anywhere; }
+.link-active, .link-actions, .link-feedback { grid-column: 1 / -1; }
+.link-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
+.link-actions button { margin: 0; }
+.link-secondary { padding: .6rem .8rem; border: 1px solid currentColor; background: transparent; color: var(--wine); cursor: pointer; }
+.link-feedback { margin: 0; }
+.link-feedback:empty { display: none; }
+
+@media (max-width: 500px) {
+  .guest-link { grid-template-columns: minmax(0, 1fr); }
+}

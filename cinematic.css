@@ -4,6 +4,10 @@
   --wine: #292b20;
   --olive: #414831;
   --champagne: #d8b87d;
+  --cinema-black: #171c15;
+  --cinema-olive: #222a1e;
+  --cinema-copy: #ddd3c2;
+  --cinema-line: #d8b87d4d;
 }
 
 .hero {
@@ -116,7 +120,133 @@
 
 .countdown strong { color: var(--champagne); }
 .countdown span { color: var(--paper); }
-.gallery { background: #e8ddc9; }
+
+/* Carry the hero's palette through the rest of the invitation. */
+body {
+  color: var(--paper);
+  background: var(--cinema-black);
+}
+
+main > .section {
+  border-top: 1px solid var(--cinema-line);
+}
+
+.story,
+.gallery {
+  background: radial-gradient(ellipse at top, #30392a, var(--cinema-black) 75%);
+}
+
+.details,
+.entourage {
+  background: var(--cinema-black);
+}
+
+.dress-code {
+  background: var(--cinema-olive);
+}
+
+.section .kicker,
+.section .line-icon,
+.section .text-link,
+.section .asset-note,
+.section .photo-caption {
+  color: var(--champagne);
+}
+
+.section-heading h2,
+.story-copy h2,
+.dress-copy h2,
+.venue-card h3,
+.burgundy-card h3,
+.attire-card strong {
+  color: var(--paper);
+}
+
+.story-copy > p:not(.kicker),
+.dress-copy > p:not(.kicker),
+.venue-card p:not(.kicker),
+.burgundy-card p:not(.kicker),
+.attire-card small,
+.palette span {
+  color: var(--cinema-copy);
+}
+
+.story-copy > p.story-ending {
+  color: var(--champagne) !important;
+}
+
+.story-visual {
+  min-width: 0;
+}
+
+.photo-frame {
+  background: #252c21;
+  border-color: var(--cinema-line);
+  box-shadow: 12px 14px 0 #d8b87d13;
+}
+
+.venue-grid {
+  gap: 16px;
+}
+
+.venue-card,
+.burgundy-card {
+  min-height: 340px;
+  padding: clamp(30px, 5vw, 58px) 22px;
+  background: linear-gradient(155deg, #333d2c, #22291f);
+  border: 1px solid var(--cinema-line);
+}
+
+.text-link {
+  align-self: center;
+  padding: .65rem 1rem;
+  border: 1px solid var(--cinema-line);
+  text-decoration: none;
+  text-underline-offset: 4px;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+  background: #d8b87d15;
+}
+
+.attire-card {
+  min-width: 0;
+  background: radial-gradient(ellipse at top, #3b4634, var(--cinema-black));
+  border-color: var(--cinema-line);
+}
+
+.attire-figure {
+  flex-shrink: 0;
+}
+
+.woman::after { background: #b07683; }
+.man::after { background: #79866d; }
+
+.gallery-photo::after {
+  background: none;
+  box-shadow: inset 0 0 0 1px var(--cinema-line);
+}
+
+footer {
+  background: #121610;
+  color: var(--cinema-copy);
+  border-top: 1px solid var(--cinema-line);
+}
+
+:focus-visible {
+  outline: 2px solid var(--champagne);
+  outline-offset: 4px;
+}
+
+@media (max-width: 520px) {
+  main > .section { padding-block: 70px; }
+  .section-heading { margin-bottom: 36px; }
+  .attire-card { padding-inline: 8px; }
+  .attire-figure { width: clamp(62px, 21vw, 92px); }
+  .woman::after { width: min(110px, 26vw); }
+  .man::after { width: min(95px, 24vw); }
+}
 
 @media (max-width: 820px) {
   .hero { min-height: max(740px, 100svh); }

@@ -8,6 +8,18 @@ from deploy.invites import InvitationStore
 
 
 class LinkManagementTests(unittest.TestCase):
+    def test_deletes_only_the_selected_guest_link(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "invites.sqlite"
+            store = InvitationStore(path)
+            removed = store.create("Remove me", 2)
+            kept = store.create("Keep me", 4)
+            self.assertTrue(store.delete_invite(removed))
+            self.assertFalse(store.delete_invite(removed))
+            store = InvitationStore(path)
+            self.assertIsNone(store.find(removed))
+            self.assertEqual([invite["token"] for invite in store.list_invites()], [kept])
+
     def test_existing_link_can_be_updated_disabled_and_reactivated(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "invites.sqlite"

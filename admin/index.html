@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex" />
   <title>Guest links · Karl &amp; Aira</title>
   <link rel="stylesheet" href="/styles.css?v=11" />
-  <script src="/admin/admin.js?v=3" defer></script>
+  <script src="/admin/admin.js?v=4" defer></script>
   <link rel="stylesheet" href="/admin/links.css" />
   <script src="/admin/entourage.js" defer></script>
 </head>
@@ -56,10 +56,12 @@
           <button class="submit-btn">Save changes</button>
           <button class="link-secondary" type="button" data-copy>Copy link</button>
           <a target="_blank" rel="noopener noreferrer">Preview</a>
+          <button class="link-secondary" type="button" data-delete>Delete link</button>
         </div>
         <p class="link-feedback" role="status"></p>
       </form>
     </template>
+    <p id="linkActionStatus" role="status"></p>
   </section>
   <section class="admin-panel" aria-labelledby="entourageTitle">
     <h2 id="entourageTitle">Wedding entourage</h2>

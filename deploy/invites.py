@@ -70,6 +70,11 @@ class InvitationStore:
                                 (name.strip(), seats, active, token))
             return result.rowcount == 1
 
+    def delete_invite(self, token):
+        with closing(sqlite3.connect(self.path)) as db, db:
+            result = db.execute("DELETE FROM invitations WHERE token = ?", (token,))
+            return result.rowcount == 1
+
     def find(self, token):
         with closing(sqlite3.connect(self.path)) as db:
             row = db.execute("SELECT name, seats FROM invitations WHERE token = ? AND active = 1", (token,)).fetchone()
@@ -103,6 +108,19 @@ class InvitationHandler(BaseHTTPRequestHandler):
             self.respond(404, {"error": "Invitation link not found."})
             return
         self.respond(200, invitation)
+
+    def do_DELETE(self):
+        match = re.fullmatch(r"/admin/api/invites/([A-Za-z0-9_-]{32})", self.path)
+        if not match:
+            self.respond(404, {"error": "Not found."})
+            return
+        if self.headers.get("X-Invite-Action") != "delete":
+            self.respond(400, {"error": "Invalid delete request."})
+            return
+        if not self.server.store.delete_invite(match[1]):
+            self.respond(404, {"error": "Invitation link not found."})
+            return
+        self.respond(200, {"deleted": True})
 
     def do_POST(self):
         edit = re.fullmatch(r"/admin/api/invites/([A-Za-z0-9_-]{32})", self.path)

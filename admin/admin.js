@@ -47,7 +47,9 @@ function makeLinkCard(invite) {
   const save = card.querySelector('[type="submit"], .submit-btn');
   const preview = card.querySelector('a');
   const copy = card.querySelector('[data-copy]');
+  const remove = card.querySelector('[data-delete]');
   const url = guestUrl(invite.token);
+  let savedName = invite.name;
   name.value = invite.name;
   seats.value = invite.seats;
   active.checked = invite.active;
@@ -64,8 +66,10 @@ function makeLinkCard(invite) {
     event.preventDefault();
     const changes = { name: name.value.trim(), seats: Number(seats.value), active: active.checked };
     save.disabled = true;
+    remove.disabled = true;
     try {
       await inviteRequest('/' + invite.token, postJson(changes));
+      savedName = changes.name;
       card.dataset.guestName = changes.name.toLowerCase();
       updateActions(changes.active);
       feedback.textContent = changes.active ? 'Saved. The same link is active.' : 'Saved. This link is inactive.';
@@ -73,6 +77,31 @@ function makeLinkCard(invite) {
       feedback.textContent = error.message;
     } finally {
       save.disabled = false;
+      remove.disabled = false;
+    }
+  });
+  remove.addEventListener('click', async () => {
+    if (!window.confirm(`Permanently delete the link for ${savedName}? Guests will lose access to their reservation and this cannot be undone.`)) return;
+    save.disabled = true;
+    remove.disabled = true;
+    try {
+      await inviteRequest('/' + invite.token, {
+        method: 'DELETE',
+        headers: { 'X-Invite-Action': 'delete' },
+      });
+      card.remove();
+      filterLinks();
+      document.querySelector('#linkActionStatus').textContent = `Deleted the link for ${savedName}.`;
+      if (linkField.value === url) {
+        result.hidden = true;
+        linkField.value = '';
+        status.textContent = '';
+      }
+      search.focus();
+    } catch (error) {
+      feedback.textContent = error.message;
+      save.disabled = false;
+      remove.disabled = false;
     }
   });
   copy.addEventListener('click', async () => {

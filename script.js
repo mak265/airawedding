@@ -76,12 +76,17 @@ musicToggle.addEventListener('click', async () => {
 });
 
 const welcomeGate = $('#welcomeGate');
-$('#enterInvitation').addEventListener('click', async () => {
-  await startMusic();
+$('#enterInvitation').addEventListener('click', () => {
+  const firstPage = new URL(window.location.href);
+  firstPage.hash = '';
+  window.history.replaceState(window.history.state, '', firstPage);
+  window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   welcomeGate.classList.add('dismissed');
   setTimeout(() => { welcomeGate.hidden = true; }, 850);
-  showToast('Celeste is playing · Tap Music anytime to pause.');
-});
+  startMusic().then((playing) => {
+    if (playing) showToast('Celeste is playing · Tap Music anytime to pause.');
+  });
+}, { once: true });
 
 const countInput = $('#attendeeCount');
 const guestNamesWrap = $('#guestNamesWrap');

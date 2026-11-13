@@ -81,7 +81,8 @@ $('#enterInvitation').addEventListener('click', () => {
 }, { once: true });
 
 async function showGuestReservation() {
-  const token = new URLSearchParams(window.location.search).get('invite');
+  const pathToken = window.location.pathname.match(/^\/i\/([A-Za-z0-9_-]{32})$/)?.[1];
+  const token = pathToken ?? new URLSearchParams(window.location.search).get('invite');
   if (token === null) return;
   const reservation = $('#guestReservation');
   reservation.hidden = false;

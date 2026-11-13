@@ -19,8 +19,7 @@ form.addEventListener('submit', async (event) => {
     if (response.status === 401) throw new Error('Sign in to the admin page again.');
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || 'Could not create the invitation.');
-    const link = new URL('/', window.location.origin);
-    link.searchParams.set('invite', data.token);
+    const link = new URL('/i/' + data.token, 'https://karlandairawedding.duckdns.org');
     linkField.value = link.href;
     document.querySelector('#previewInvite').href = link.href;
     result.hidden = false;

@@ -34,7 +34,6 @@ const music = $('#bgMusic');
 const toast = $('#toast');
 let toastTimer;
 let musicPlaying = false;
-let initialMusicSeekDone = false;
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add('show');
@@ -42,13 +41,6 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove('show'), 3600);
 }
 async function startMusic() {
-  if (!initialMusicSeekDone) {
-    if (music.readyState < 1) {
-      await new Promise((resolve) => music.addEventListener('loadedmetadata', resolve, { once: true }));
-    }
-    if (music.duration > 82) music.currentTime = 82;
-    initialMusicSeekDone = true;
-  }
   try {
     await music.play();
     musicPlaying = true;
@@ -84,7 +76,7 @@ $('#enterInvitation').addEventListener('click', () => {
   welcomeGate.classList.add('dismissed');
   setTimeout(() => { welcomeGate.hidden = true; }, 850);
   startMusic().then((playing) => {
-    if (playing) showToast('Celeste is playing · Tap Music anytime to pause.');
+    if (playing) showToast('Until I Found You · Violin cover');
   });
 }, { once: true });
 

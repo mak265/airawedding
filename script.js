@@ -100,3 +100,28 @@ async function showGuestReservation() {
   }
 }
 showGuestReservation();
+
+fetch('/api/entourage').then(async (response) => {
+  if (!response.ok) return;
+  const roster = await response.json();
+  document.querySelectorAll('[data-entourage]').forEach((group) => {
+    const names = roster[group.dataset.entourage];
+    if (!Array.isArray(names)) return;
+    if (group.matches('p')) {
+      group.replaceChildren();
+      names.forEach((name, index) => {
+        if (index) group.append(document.createElement('br'));
+        group.append(name);
+      });
+      return;
+    }
+    const tag = group.matches('.names') ? 'span' : 'strong';
+    group.replaceChildren(...names.map((name) => {
+      const item = document.createElement(tag);
+      item.textContent = name;
+      return item;
+    }));
+  });
+}).catch(() => {
+  // Keep the original invitation roster if the API is unavailable.
+});

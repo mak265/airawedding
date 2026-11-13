@@ -7,6 +7,7 @@
   <title>Guest links · Karl &amp; Aira</title>
   <link rel="stylesheet" href="/styles.css?v=11" />
   <script src="/admin/admin.js" defer></script>
+  <script src="/admin/entourage.js" defer></script>
 </head>
 <body>
   <main class="admin-panel">
@@ -33,5 +34,15 @@
     </div>
     <p id="inviteStatus" role="status"></p>
   </main>
+  <section class="admin-panel" aria-labelledby="entourageTitle">
+    <h2 id="entourageTitle">Wedding entourage</h2>
+    <p>Enter one name per line under each role.</p>
+    <form id="editEntourage">
+      <div id="entourageFields"></div>
+      <button class="submit-btn" disabled>Save entourage</button>
+    </form>
+    <p id="entourageStatus" role="status">Loading entourage…</p>
+    <a href="/#entourage" target="_blank" rel="noopener">Open wedding invitation</a>
+  </section>
 </body>
 </html>
